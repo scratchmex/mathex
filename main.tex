@@ -1,0 +1,372 @@
+\documentclass[spanish,mexico]{article}
+\usepackage[utf8]{inputenc}
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+\usepackage[es-nodecimaldot]{babel}
+\usepackage{amsthm, amssymb, amsmath, amsfonts, bbm, mathtools}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{titling}
+\usepackage{lmodern} % optimize some fonts
+\usepackage{float}
+\usepackage{mathrsfs}
+
+%% references
+\usepackage[capitalise]{cleveref}
+% \usepackage{biblatex}
+% \addbibresource{ref.bib}
+
+%% images
+\usepackage{caption} %para usar caption con *
+\usepackage{graphicx}
+\usepackage{subcaption}
+% \usepackage{svg} %inserta imagenes svg
+% \svgpath{{./imgs}} %el path de svg
+
+%% numbered figures
+\usepackage{chngcntr}
+\counterwithin{figure}{section} %enumera las figuras por seccion
+
+%% numbered equations [https://tex.stackexchange.com/questions/106935/how-to-include-chapter-number-in-equation-numbers]
+\numberwithin{equation}{section}
+
+%% set layout
+\usepackage[vmargin=1in, hmargin=0.5in]{geometry}
+% \usepackage[pass,showframe]{geometry}
+\usepackage{layout} %% use \layout
+%% 1in = 72pt
+%% headheight + 2*headsep = margin
+\setlength{\topmargin}{-50pt}
+\setlength{\headheight}{26pt}
+\setlength{\headsep}{24pt}
+
+\makeatletter
+%% define safetitle and iftitle
+\def\iftitle{\ifx\thetitle \empty \else }
+\def\safetitle{\iftitle{\thetitle}\fi}
+
+%% set title layout in \maketitle
+\def\headertitle{%
+    \ifdefined\hw{\hw}\fi%
+    \ifdefined\hw \iftitle{ -- }\fi\fi%
+    \safetitle%
+}
+\def\@maketitle{%
+  \begin{center}%
+  \let \footnote \thanks
+    {\LARGE \headertitle \par}%
+    \ifdefined\subtitle{\large\itshape \subtitle \par}\fi%
+    {\Large \course{} \par}%
+    \vskip 1.5em%
+    {\large
+      \lineskip .5em%
+      \begin{tabular}[t]{cc}%
+        \begin{tabular}{c}%
+            \@author \\\ifdefined\email \email\fi%
+        \end{tabular}%
+        &
+        \begin{tabular}{c}%
+            \university\\ \@date%
+        \end{tabular}%
+      \end{tabular}\par}%
+    \vskip 1em%
+    \hrule
+  \end{center}%
+  \par
+  \vskip 1.5em%
+}
+\makeatother
+
+%% set header
+\usepackage{fancyhdr}
+%% custom plain style
+\fancypagestyle{plain}{%
+    \fancyhf{} % sets both header and footer to nothing
+    \renewcommand{\headrulewidth}{0pt}
+    \setlength{\headheight}{0pt}
+    \fancyfoot[R]{\thepage}
+}
+%% custom style to all
+\pagestyle{fancy}
+\fancyhf{}
+%\renewcommand{\sectionmark}[1]{ \markright{#1}{} }
+\fancyhead[L]{\phantom{}\thetitle \newline \course}
+\fancyhead[R]{\theauthor}
+\fancyfoot[R]{\thepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%% USEFUL DEFINITIONS %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+%% math definitions
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+ 
+\newtheorem{proposition}{Proposición}
+\newtheorem{theorem}{Teorema}
+\newtheorem{lemma}{Lema}
+\newtheorem{corollary}{Corolario}
+
+%% boxed theorem style
+%% https://tex.stackexchange.com/questions/36278/box-around-theorem-statement
+% \usepackage{mdframed}
+% \newmdtheoremenv{}{}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problema}
+\newtheorem{definition}{Definición}[section]
+\newtheorem*{example}{Ejemplo}
+
+\theoremstyle{remark}
+\newtheorem*{observation}{Observación}
+\newtheorem*{note}{Nota}
+
+\newenvironment{solution}{\begin{proof}[Solución]}{\end{proof}}
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+%% declare useful commands
+\newcommand{\eps}{\varepsilon}
+\newcommand{\To}{\longrightarrow}
+\newcommand{\Mapsto}{\longmapsto}
+\newcommand{\normsg}{\trianglelefteq}  % normal subgroup
+
+%% remember to use \command* to insert implicit \left #\right
+\DeclarePairedDelimiter{\set}{\{}{\}}
+\DeclarePairedDelimiter{\floor}\lfloor\rfloor
+\DeclarePairedDelimiter{\ceil}\lceil\rceil
+\DeclarePairedDelimiter{\abs}\lvert\rvert
+\DeclarePairedDelimiter{\gen}\langle\rangle
+\DeclarePairedDelimiter{\sqbr}[]
+\DeclarePairedDelimiter{\norm}\lVert\rVert
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\ord}{ord}
+\renewcommand{\Pr}{\op{P}\sqbr}
+\newcommand{\Es}{\op{E}\sqbr}
+
+%% quick operatorname def
+%% https://www.overleaf.com/project/5d76ca9503e20d0001323db3
+\newcommand{\op}[1]{\operatorname{#1}}
+
+%% set documents labels
+%% hw, subtitle and email can be erased
+\def\hw{Tarea 2}
+\title{El titulo va aqui}
+\def\course{Métodos estadísticos}
+\def\university{Universidad de Guanajuato}
+\def\subtitle{}
+\author{Ricardo Ivan González Franco}
+\def\email{\url{ivan.gonzalez@cimat.mx}}
+\date{\today}
+
+%% allow linebreaks in equations
+\allowdisplaybreaks[2]
+
+%% code highlighting
+\usepackage[newfloat]{minted}
+\usepackage{listings}
+%% csquotes should be after minted
+%% https://tex.stackexchange.com/questions/380799/warning-when-adding-package-minted
+\usepackage{csquotes}
+
+%%%%%%%%%%% BEGIN DOCUMENT %%%%%%%%%%% 
+\begin{document}
+\maketitle
+
+Donec iaculis, felis a ultricies eleifend, sapien ante scelerisque augue, eget hendrerit nisi leo nec orci. Nam laoreet dignissim tellus eu tincidunt. In commodo, orci vitae blandit finibus, diam ante condimentum purus, auctor commodo purus massa quis nibh. In hac habitasse platea dictumst. Etiam feugiat orci ac turpis elementum imperdiet. Praesent luctus est sed turpis aliquam, vel accumsan enim interdum. Curabitur convallis malesuada placerat. Integer pulvinar neque vitae dui mollis gravida. Aliquam aliquam tempor dui, eu porttitor enim viverra et. Pellentesque et congue dui. Aenean at eros neque. Sed sagittis venenatis ipsum id porta. Ut bibendum, elit non luctus pretium, diam tellus pharetra lectus, eu congue nisl ligula a purus. Quisque vehicula ultricies blandit. 
+
+%mantiene la identacion en cada parrafo [https://tex.stackexchange.com/questions/241983/remove-indent-when-using-enumerate]
+\begin{enumerate}[wide]
+
+\item Problema 1
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at sollicitudin metus. Aliquam dapibus nisl quis lectus porta, eget scelerisque enim condimentum. Nunc a bibendum lorem. Nulla iaculis neque vel libero imperdiet placerat. Etiam ac augue id erat euismod egestas. In sagittis tempus libero, ut egestas risus fringilla in. Cras pretium ex at nisi rhoncus, sit amet viverra sapien ultricies. 
+    
+    \[
+        \set*{\frac{\frac{a}{b}}{c}}
+    \]
+    
+    \begin{figure}[h]
+    \centering
+    \begin{minipage}{.5\textwidth}
+        \centering
+        \includegraphics[width=0.7\textwidth]{imgs/1.pdf}
+        \caption*{$E_1:y^2=x^3-3x+5$}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+        \centering
+        \includegraphics[width=0.7\textwidth]{imgs/2.pdf}
+        \caption*{$E_2:y^2=x^3-5x+3$}
+    \end{minipage}
+    \caption{Dos ejemplos de curvas elípticas}
+    \label{fig:elip2examples}
+    \end{figure}
+    
+\item Problema 2
+
+    Integer sit amet urna molestie, ultrices massa id, aliquet mi. Aliquam feugiat laoreet lectus a vestibulum. Curabitur a nisi scelerisque mi porttitor rhoncus. Duis sit amet augue risus. Vestibulum sed mauris quis quam dictum euismod vel in lectus. Pellentesque efficitur magna lectus, a fringilla elit lacinia vel. Suspendisse fringilla sodales sem, sit amet placerat metus tempor sed. Vestibulum id lorem massa. In hac habitasse platea dictumst. 
+    
+    \[
+        \floor*{\frac{\frac{a}{b}}{c}}
+    \]
+
+\begin{solution}
+    Utilizando el algoritmo de la division se tiene que,
+    
+    \begin{minipage}{.3\linewidth}
+      \begin{alignat*}{2}
+        100 &=50\cdot2&&+0\\
+        50  &=25\cdot2&&+0\\
+        25  &=12\cdot2&&+1\\
+        12  &=6 \cdot2&&+0\\
+        6   &=3 \cdot2&&+0\\
+        3   &=1 \cdot2&&+1\\
+        1   &=0 \cdot2&&+1
+      \end{alignat*}
+    \end{minipage}
+    \begin{minipage}{.3\linewidth}
+      \begin{alignat*}{2}
+        217 &=108\cdot2&&+1\\
+        108 &=54 \cdot2&&+0\\
+        54  &=27 \cdot2&&+0\\
+        27  &=13 \cdot2&&+1\\
+        13  &=6  \cdot2&&+1\\
+        6   &=3  \cdot2&&+0\\
+        3   &=1  \cdot2&&+1\\
+        1   &=0  \cdot2&&+1
+      \end{alignat*}
+    \end{minipage}
+    \begin{minipage}{.3\linewidth}
+      \begin{alignat*}{2}
+        315 &=157 \cdot2&&+1\\
+        157 &=78  \cdot2&&+1\\
+        78  &=39  \cdot2&&+0\\
+        39  &=19  \cdot2&&+1\\
+        19  &=9   \cdot2&&+1\\
+        9   &=4   \cdot2&&+1\\
+        2   &=2   \cdot2&&+0\\
+        2   &=1   \cdot2&&+0\\
+        1   &=0   \cdot2&&+1
+      \end{alignat*}
+    \end{minipage}
+    
+    por lo que $100=1100100_2$, $217=11011001_2$, $315=100111011_2$.
+    
+    \begin{minipage}{.3\linewidth}
+      \begin{alignat*}{2}
+        100 &=33\cdot3&&+1\\
+        33  &=11\cdot3&&+0\\
+        11  &=3 \cdot3&&+2\\
+        3   &=1 \cdot3&&+0\\
+        1   &=0 \cdot3&&+1
+      \end{alignat*}
+    \end{minipage}
+    \begin{minipage}{.3\linewidth}
+      \begin{alignat*}{2}
+        217 &=72 \cdot3&&+1\\
+        72  &=24 \cdot3&&+0\\
+        24  &=8  \cdot3&&+0\\
+        8   &=2  \cdot3&&+2\\
+        2   &=0  \cdot3&&+2
+      \end{alignat*}
+    \end{minipage}
+    \begin{minipage}{.3\linewidth}
+      \begin{alignat*}{2}
+        315 &=105 \cdot3&&+0\\
+        105 &=35  \cdot3&&+0\\
+        35  &=11  \cdot3&&+2\\
+        11  &=3   \cdot3&&+2\\
+        3   &=1   \cdot3&&+0\\
+        1   &=0   \cdot3&&+1
+      \end{alignat*}
+    \end{minipage}
+    
+    por lo que $100=10201_3$, $217=22001_3$, $315=102200_3$. Ademas ya sabemos que $100=100_{10}$, $217=217_{10}$, $315=315_{10}$.
+\end{solution}
+
+\end{enumerate}
+La relación de equivalencia mod se pone,
+\[
+    g^x
+    \equiv h
+    \pmod{p}.
+\]
+Pero en ecuacion es $a+123\mod 3=1$.
+
+Para que los casos no aplasten las fracciones y se ponga modo texto automáticamente usa \texttt{dcases*}. Visto en \url{https://tex.stackexchange.com/questions/172693/cases-environment-compresses-fractions} 
+\[
+    m=
+    \begin{dcases*}
+        \frac{y_2-y_1}{x_2-y_1} &si $P\neq Q$\\
+        \frac{3x^2+a}{2y}       &si $P=Q$
+    \end{dcases*}
+\]
+
+Para poner 2 ecuaciones alineadas en 2 columnas usa minipages
+
+\fbox{\begin{minipage}{.45\linewidth}
+    \centering
+    \begin{align*}
+        x_3&=m^2-x_1-x_2 \\
+        y_3&=m(x_1-x_3)-y_1,
+    \end{align*}
+\end{minipage}}%
+\fbox{\begin{minipage}{.45\linewidth}
+\centering
+    \[
+        m=
+        \begin{dcases*}
+            \frac{y_2-y_1}{x_2-y_1} &si $P\neq Q$,\\
+            \frac{3x_1^2+a}{2y_1}   &si $P=Q$.
+        \end{dcases*}
+    \]
+\end{minipage}}
+
+\newpage
+
+Quisque et mi eget est accumsan imperdiet vitae non diam. Phasellus pulvinar lorem id molestie rhoncus. Aliquam consectetur enim nec rhoncus scelerisque. Praesent ultricies ac ipsum a placerat. Nunc quis ante enim. Donec ac libero ante. Integer suscipit magna et nunc dictum consequat. Fusce volutpat bibendum arcu, et sagittis tellus finibus vitae. Mauris condimentum nulla odio, nec consectetur est consectetur a. Aenean lorem ante, congue id est at, facilisis suscipit risus. 
+
+\begin{minted}[linenos, breaklines,frame=single]{cpp}
+template<class TPriority, class TKey>
+class PriorityQueue{
+    protected:
+        std::map<TKey, unsigned int> map;
+        std::vector<std::pair<TPriority, TKey>> arr;
+
+        int parent(const int &i) { return (i-1)/2; } 
+        int left(const unsigned int &i) { return (2*i +1); }     
+        int right(const unsigned int &i) { return (2*i +2); } 
+        void swap(const unsigned int &a, const unsigned int &b);
+        void heapify_down(const unsigned int &idx);
+
+    public:
+        PriorityQueue();
+        PriorityQueue(const std::vector<std::pair<TPriority, TKey>> &arr);
+        unsigned int size() { return arr.size(); } 
+        bool empty() { return size()==0; }
+        std::pair<TPriority, TKey> top() { return arr.at(0); }
+        bool isInserted(const TKey &k);
+        void pop();
+        void insert(const TPriority &p, const TKey &k);
+        void erase(const TKey &k);
+};
+
+template<class TPriority, class TKey>
+class UpdatableHeap : public PriorityQueue<TPriority, TKey> {
+    public:
+        void insertOrUpdate(const TPriority &p, const TKey &k);
+};
+\end{minted}
+
+
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+
+\newpage
+\layout
+
+%% Esto es para mostrar todas las referencias
+% \nocite{*}
+% \printbibliography
+
+\end{document}
